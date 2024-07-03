@@ -2,7 +2,7 @@
 create database michal_project collate hebrew_100_ci_as
 use michal_project
 go
----3 טבלאות מרכזיות
+
 go
 
 create table book
@@ -82,7 +82,6 @@ constraint fk_costumer_shopID foreign key (shopID) references shop(shopID),
 constraint fk_costumer_MikudID foreign key (MikudID) references Mikud(MikudID)
  )
 
----4 טבלאות קטנות 
 
 create table TypeBook 
 (
@@ -128,7 +127,6 @@ constraint pk_sofer primary key(soferID)
 select*from sofer
 
 
-----הכנסת נתונים
 ---------------------------------------insert------------------------------------------
 
 insert into book(NameBook,soferID,YearsOztaa,ISBN,Teur,Topic,TypeBookID,Eara,Cost,HowPeper)
@@ -199,33 +197,25 @@ add numbercount varchar(10) null
 --drop table shop
 
 ------------------------------update------------------------
--------עדכון עובד מספר 1 לשם חיים-----
 update oved
 set FirstName='חיים'
 where ovedId=1
--------בטבלת העובדים עידכון כל מי ששם המשפחה דורון לתז מסוימת
+	
 update oved
 set LastName='דורון'
 where tz=789452309
 
---------------------פעולות מחיקה--------delete-------------------------------
+----------------------------delete-------------------------------
 
----למחוק את אורן מטבלת העובדים
 delete from oved where FirstName='אורן'
----פעולה למחיקת כל הרשומות בטבלת ספרים חוץ מהספרים
+	
 --delete from books
 
 
--------------truncate----------------לרוקן את טבלת העובדים---
+-------------truncate---------------
 truncate table book
----פעולות עידכון
 
-
-
-
-select* from book
-
----------------פרוצדורה שבודקת האם ספר מסוים קיים במערכת ואם לא מכניס אותו-------procedure----------------variables-----if else---print-
+-----------------procedure----------------variables-----if else---print-
 alter procedure dbo.pr_newbook  (@NameBook varchar(30),@sofer int,@YearsOztaa varchar(4),@ISBN varchar(10),@Teur varchar(30) null,
 @Topic varchar(30),
 @TypeBookID int,
@@ -251,7 +241,6 @@ alter procedure dbo.pr_newbook  (@NameBook varchar(30),@sofer int,@YearsOztaa va
 	   exec dbo.pr_newbook 'גם',3,'2021','9056524','ספר מרגש על נכות',null,6,null,150,'500'
 
 	   -----------------------------------------------function-------------------------------------------------
-	   ------------------------------פונקציה שבודקת האם התעודת זהות שהוזנה תקינה--------------------------------
 	   
 	   create function dbo.tz (@tz bigint)
 	   returns varchar(10)
@@ -268,8 +257,6 @@ alter procedure dbo.pr_newbook  (@NameBook varchar(30),@sofer int,@YearsOztaa va
 
 	select dbo.tz (7767865)
 
- -------------------פונקציה בתוך פרוצדורה-------------------------
-	   -----------------מקבלת ת"ז בודקת אם תקין ואם כן בודקת אם זה עובד או לקוח----------------------------
 	   create or alter procedure PR_tz_ovedOrCostumer(@tz varchar(9))
 	   as 
 	   begin
@@ -291,8 +278,7 @@ alter procedure dbo.pr_newbook  (@NameBook varchar(30),@sofer int,@YearsOztaa va
 	  go
 
 
-	  	   --select מתוך טבלה שמשתמש בפונקציה-----------join-------------
-	   --מציאת העובד הגר בעיר מסוימת
+	  	  -------join-------------
 	  
 go
 create function dbo.cityoved(@city varchar(10))
@@ -309,7 +295,7 @@ select *from dbo.cityoved('אשדוד')
 
 
 
-	   -----------------------------view לטבלת עובדים-----------join--------left join-----------
+	   -----------------------------view ------join--------left join-----------
 	   go
 	  create view allNames
 	  as
@@ -324,7 +310,7 @@ select *from dbo.cityoved('אשדוד')
 	  select * from allNames
 
 
-	  -------------------טריגר הפועל בעת עידכון נתונים triger----------------------------------
+	  ---------------- triger----------------------------------
 
 go
  create or alter trigger trg_costumer
@@ -342,7 +328,6 @@ go
  --select * from costumer
 
 
-  ----------------------------טריגר כשנכנס לקוח חדש--------------- 
        go
        create trigger trg_newCostumer
        on costumer
@@ -350,7 +335,6 @@ go
        as
        print'ברוך הבא! לקוח חדש הצטרף למערכת'
 
-	   ----------------------------טריגר כשמוחקים מטבלת עובדים--------------- 
        go
        create trigger trg_deleteoved
        on oved
@@ -360,7 +344,7 @@ go
 
 	   
 
-----------------------------שולף את העובדים ללא מיקוד--------------procedure--left join+ where null--------------------
+------------------------procedure--left join+ where null--------------------
 	  create procedure dbo.pr_noMikud
 	  as
 	  begin
@@ -376,7 +360,7 @@ go
 
 	   -----------------------------------------------------------
 
-------------------------פרוצדורה המחשבת באיזה עיר גרים הכי הרבה לקוחות-----------having---------------------
+----------------------------having---------------------
 -----------------------group by+subselect----------------------
 create procedure dbo.max_city
 as
@@ -393,9 +377,9 @@ group by co.cityID)ff)
 end
 exec dbo.max_city
 
----------------------------------------------פונקציות אגרגטיביות----------------------------------------
+----------------------------------------------------------------------------
 
-	    ----------------------------פונקציה שבודקת האם הספר חדש-------while----------------
+	    ---------------------------while----------------
 	   
 	   go
 	   create function dbo.costbook (@cost int)
@@ -412,7 +396,7 @@ exec dbo.max_city
 	   
 
          
-		 -----------------פרוצדורה שפועלת בעת שליפת מידע ובודקת מי מבקש המידע ושולפת נתונים בהתאם להרשאות--------if else--- union---- join ----print--------
+		 --------------------if else--- union---- join ----print--------
          go
 		 create procedure dbo.typeovedchek
          as
@@ -446,7 +430,7 @@ exec dbo.max_city
 exec dbo.typeovedchek 
 go
 
-	 ------------try catch-----------שגיאה---------------- 
+	 ------------try catch---------------------- 
 
 alter procedure netunimBooks 
 as
@@ -483,7 +467,7 @@ exec netunimBooks
 
 
 
-----------------------left join המשתמש ב and  בon+ פרוצדורה---------------------------
+----------------------left join -----------------
 go
 create or alter procedure ovedcity
 as
@@ -497,12 +481,12 @@ exec ovedcity
 
 
               ---------------------------order by---------------------------
-	  -------------------------------מציג לפי סדר עולה של הקוד עיר--------------------
+	  ----------------------------------------------
 	
 	  select* from costumer
 	  order by cityID
 
-	   -------------------------------מציג לפי סדר יורד של הקוד עיר--------------------
+	   -----------------------------------------------
 	  select* from costumer
 	  order by cityID desc
 
